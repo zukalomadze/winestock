@@ -7,6 +7,7 @@ class Wine(models.Model):
     year = models.PositiveSmallIntegerField(verbose_name='Year')
     alcohol = models.FloatField(verbose_name="Alcohol Level")
     stock = models.IntegerField(verbose_name="Stock")
+    price = models.DecimalField(verbose_name="price", decimal_places=2, max_digits=6)
 
     def __str__(self):
         return self.name

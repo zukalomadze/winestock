@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 from wine import views
 
-urlpatterns = [
-    path('wine/', views.WineList.as_view(), name='wine list'),
-    path('wine/<int:pk>', views.WineDetail.as_view(), name='wine detail'),
-]
+router = DefaultRouter()
+router.register(r'wine', views.WineViewSet)
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns = [
+    path('', include(router.urls)),
+]

@@ -1,43 +1,22 @@
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
 from wine.models import Wine
 from wine.serializers import WineSerializer
-from rest_framework import mixins, permissions
+from rest_framework import mixins, permissions, viewsets
 from rest_framework import generics
 from basket.models import Basket
 
 
-# Create your views here.
-class WineList(mixins.ListModelMixin,
-               mixins.CreateModelMixin,
-               generics.GenericAPIView):
+class WineViewSet(viewsets.ModelViewSet):
     queryset = Wine.objects.all()
     serializer_class = WineSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-class WineDetail(mixins.RetrieveModelMixin,
-                 mixins.UpdateModelMixin,
-                 mixins.DestroyModelMixin,
-                 generics.GenericAPIView):
-    queryset = Wine.objects.all()
-    serializer_class = WineSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-    def add_to_cart(self, request):
-        basket = Basket.objects.filter(user=request.user)
-        print(basket)
-        pass
+    @action(detail=True)
+    def add_to_cart(self, request, *args, **kwargs):
+        wine = self.get_object()
+        basket = Basket.objects.filter(user=request.user).get()
+        basket.products.add(wine)
+        return Response({'wine': reverse('wine-list', request=request)})

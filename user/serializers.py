@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(required=True, style={'input_type': 'password'})
-    password2 = serializers.CharField(required=True, style={'input_type': 'password'})
 
     class Meta:
         model = User
@@ -22,7 +21,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             'last_name',
             'email',
             'password',
-            'password2',
         )
 
     def create(self, validated_data):

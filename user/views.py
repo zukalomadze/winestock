@@ -28,16 +28,15 @@ class RegistrationView(APIView):
         return Response(data=data, status=status.HTTP_200_OK)
 
 
-class LoginView(APIView):
-    serializer_class = AuthTokenSerializer
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = User.objects.get(email=request.data.get('username'))
-        token = Token.objects.get(user=user).key
-        data = {'token': token}
-        # client = APIClient()
-        # client.login(username=user.email, password=user.password)
-        return Response(data=data)
-
+# class LoginView(APIView):
+#     serializer_class = AuthTokenSerializer
+#
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = User.objects.get(email=request.data.get('username'))
+#         token = Token.objects.get(user=user).key
+#         data = {'token': token}
+#         # client = APIClient()
+#         # client.login(username=user.email, password=user.password)
+#         return Response(data=data)
